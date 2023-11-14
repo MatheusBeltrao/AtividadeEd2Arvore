@@ -1,0 +1,120 @@
+import java.util.*;
+
+class No {
+    int chave;
+    No esquerda, direita;
+
+    public No(int item) {
+        chave = item;
+        esquerda = direita = null;
+    }
+}
+
+class ArvoreBinaria {
+    No raiz;
+
+    void inserir(int chave) {
+        raiz = inserirRec(raiz, chave);
+    }
+
+    No inserirRec(No raiz, int chave) {
+        if (raiz == null) {
+            raiz = new No(chave);
+            return raiz;
+        }
+        if (chave < raiz.chave)
+            raiz.esquerda = inserirRec(raiz.esquerda, chave);
+        else if (chave > raiz.chave)
+            raiz.direita = inserirRec(raiz.direita, chave);
+        return raiz;
+    }
+
+    void imprimirPreorder(No no) {
+        if (no == null)
+            return;
+        System.out.print(no.chave + " ");
+        imprimirPreorder(no.esquerda);
+        imprimirPreorder(no.direita);
+    }
+
+    void imprimirInorder(No no) {
+        if (no == null)
+            return;
+        imprimirInorder(no.esquerda);
+        System.out.print(no.chave + " ");
+        imprimirInorder(no.direita);
+    }
+
+    void imprimirPostorder(No no) {
+        if (no == null)
+            return;
+        imprimirPostorder(no.esquerda);
+        imprimirPostorder(no.direita);
+        System.out.print(no.chave + " ");
+    }
+
+    void imprimirOrdemNivel() {
+        Queue<No> fila = new LinkedList<No>();
+        fila.add(raiz);
+        while (!fila.isEmpty()) {
+            No tempNo = fila.poll();
+            System.out.print(tempNo.chave + " ");
+
+            if (tempNo.esquerda != null) {
+                fila.add(tempNo.esquerda);
+            }
+
+            if (tempNo.direita != null) {
+                fila.add(tempNo.direita);
+            }
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        ArvoreBinaria arvore = new ArvoreBinaria();
+
+        Random rand = new Random();
+        List<Integer> numeros = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            int num = rand.nextInt(101);
+            numeros.add(num);
+            arvore.inserir(num);
+        }
+
+        System.out.println("Travessia pré-ordem da árvore binária é ");
+        arvore.imprimirPreorder(arvore.raiz);
+
+        System.out.println("\nTravessia em ordem da árvore binária é ");
+        arvore.imprimirInorder(arvore.raiz);
+
+        System.out.println("\nTravessia pós-ordem da árvore binária é ");
+        arvore.imprimirPostorder(arvore.raiz);
+
+        System.out.println("\nTravessia em nível da árvore binária é ");
+        arvore.imprimirOrdemNivel();
+
+        // Remove 5 elementos da árvore e reimprime
+        // Nota: Esta é uma simples exclusão de árvore que pode desequilibrar a árvore
+        for (int i = 0; i < 5; i++) {
+            int numParaRemover = numeros.get(rand.nextInt(numeros.size()));
+            numeros.remove(Integer.valueOf(numParaRemover));
+            // TODO: Implementar a função de exclusão
+            // arvore = deleteNode(arvore, numParaRemover);
+        }
+
+        System.out.println("\n\nApós a exclusão");
+        System.out.println("Travessia pré-ordem da árvore binária é ");
+        arvore.imprimirPreorder(arvore.raiz);
+
+        System.out.println("\nTravessia em ordem da árvore binária é ");
+        arvore.imprimirInorder(arvore.raiz);
+
+        System.out.println("\nTravessia pós-ordem da árvore binária é ");
+        arvore.imprimirPostorder(arvore.raiz);
+
+        System.out.println("\nTravessia em nível da árvore binária é ");
+        arvore.imprimirOrdemNivel();
+    }
+}
